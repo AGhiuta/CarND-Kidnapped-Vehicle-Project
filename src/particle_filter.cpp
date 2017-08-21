@@ -159,6 +159,9 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 
 		dataAssociation(predictions, transformed_obs);
 
+		// reinit weight
+	    particles[i].weight = 1.0;
+
 		for(int j = 0; j < transformed_obs.size(); j++) {
 			double x_pred, y_pred;
 			LandmarkObs obs = transformed_obs[j];
