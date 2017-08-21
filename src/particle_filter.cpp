@@ -139,7 +139,8 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 			float x_f = map_landmarks.landmark_list[j].x_f;
 			float y_f = map_landmarks.landmark_list[j].y_f;
 
-			if(fabs(x_f - x_p) <= sensor_range && fabs(y_f - y_p) <= sensor_range) {
+			// if(fabs(x_f - x_p) <= sensor_range && fabs(y_f - y_p) <= sensor_range) {
+			if(dist(x_f, y_f, x_p, y_p) <= sensor_range) {
 				predictions.push_back(LandmarkObs{id_i, x_f, y_f});
 			}
 		}
@@ -178,7 +179,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
       				   		pow(y_pred - obs.y, 2) / (2 * std_y * std_y));
 
 			// product of this obersvation weight with total observations weight
-			particles[i].weight = w;
+			particles[i].weight *= w;
     	}
 	}	
 }
@@ -190,11 +191,6 @@ void ParticleFilter::resample() {
 
 	vector<Particle> resampled;
 	default_random_engine gen;
-
-	// get all of the current weights
-	for (int i = 0; i < num_particles; ++i) {
-		weights[i] = particles[i].weight;
-	}
 
 	// generate random starting index for resampling wheel
 	int index = rand() % num_particles;
