@@ -184,7 +184,9 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 			// product of this obersvation weight with total observations weight
 			particles[i].weight *= w;
     	}
-	}	
+    	
+    	weights[i] = particles[i].weight;	
+	}
 }
 
 void ParticleFilter::resample() {
